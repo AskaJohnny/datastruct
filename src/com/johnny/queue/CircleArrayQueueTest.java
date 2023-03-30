@@ -8,7 +8,7 @@ package com.johnny.queue;
  *
  * @author Johnny
  */
-public class CircleArrayTest {
+public class CircleArrayQueueTest {
 
     public static void main(String[] args) {
         CircleArray queue = new CircleArray(4);

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * Created on 2023/3/30 10:04.
- *
+ * 这是 单数组队列 不可重复使用的 数组队列
  * @author Johnny
  */
 public class ArrayQueueTest {
