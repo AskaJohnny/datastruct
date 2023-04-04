@@ -20,8 +20,10 @@ public class SingleLinkedReversedTest {
         node2.next = node3;
         node3.next = node4;
         showNode(node1);
-        Node<Integer> reversed = reversed(node1);
+        // Node<Integer> reversed = reversed(node1);
         System.out.println("---------reversed--------");
+        //Node<Integer> reversed = reversedTwoPoint(node1);
+        Node<Integer> reversed = reversedRecursion(node1);
         showNode(reversed);
     }
 
@@ -53,23 +55,70 @@ public class SingleLinkedReversedTest {
         }
     }
 
-    static Node<Integer> reversed(Node<Integer> originNode) {
+    /**
+     * 最好的方式 (双指针法)
+     *
+     * @param originNode
+     * @param <T>
+     * @return
+     */
+    static <T> Node<T> reversedTwoPoint(Node<T> originNode) {
+        Node<T> pre = null;
+        Node<T> cur = originNode;
+        Node<T> next;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
+    /**
+     * 头插法进行 反转 (比较好理解)
+     *
+     * @param originNode:
+     * @param <T> :
+     * @return :
+     */
+    static <T> Node<T> reversed(Node<T> originNode) {
         if (originNode == null || originNode.next == null) {
             System.out.println("链表为空 不能反转");
             return null;
         }
-        Node<Integer> cur = originNode;
+        Node<T> cur = originNode;
         //
-        Node<Integer> reverseHead = new Node<>();
+        Node<T> reverseHead = new Node<>();
 
-        Node<Integer> next;
+        Node<T> next;
         while (cur != null) {
             next = cur.next;
             cur.next = reverseHead.next;
             reverseHead.next = cur;
             cur = next;
         }
-        //丢弃头结点
+        // 丢弃头结点
         return reverseHead.next;
+    }
+
+    /**
+     * 递归方式 进行反转
+     *
+     * @param originNode:
+     * @param <T> :
+     * @return :
+     */
+    static <T> Node<T> reversedRecursion(Node<T> originNode) {
+        return recursion(null, originNode);
+    }
+
+    private static <T> Node<T> recursion(Node<T> pre, Node<T> cur) {
+        if (cur == null) {
+            return pre;
+        }
+        Node<T> temp = cur.next;
+        cur.next = pre;
+        return recursion(cur, temp);
     }
 }

@@ -52,11 +52,116 @@ public class SingleLinkedTest {
         singleLinked.addToListOrderBy(node1);
         singleLinked.addToListOrderBy(node3);
         singleLinked.addToListOrderBy(node2);
-        singleLinked.addToListOrderBy(node4);
+        //singleLinked.addToListOrderBy(node4);
 
-        singleLinked.addToListOrderBy(node2);
+        // singleLinked.addToListOrderBy(node2);
+
+        // singleLinked.showList();
+
+        // System.out.println("---------变更update----------");
+        // singleLinked.update(new HeroNode(3, "韦哥", "无敌伟哥强无敌!"));
+        // singleLinked.showList();
+
+        // singleLinked.delete(new HeroNode(3, "", ""));
+        // singleLinked.delete(new HeroNode(1, "", ""));
+
+        //        System.out.println("---------删除delete----------");
+        //        singleLinked.showList();
+        //
+        //        System.out.println(getLength(singleLinked));
+        //        System.out.println(getLastByIndex(singleLinked, 4));
 
         singleLinked.showList();
+        System.out.println("reversed.....");
+        reverseLinked(singleLinked);
+        singleLinked.showList();
+
+        HeroNode heroNode = reverseLinkedRecursion(singleLinked.head);
+
+        System.out.println(heroNode);
+    }
+
+    /**
+     * 思路 递归
+     *
+     * @param singleLinked
+     */
+    static HeroNode reverseLinkedRecursion(HeroNode heroNode) {
+        HeroNode newNode;
+        if (heroNode == null || heroNode.next == null) {
+            return heroNode;
+        } else {
+            HeroNode temp = heroNode.next;
+            newNode = reverseLinkedRecursion(heroNode.next);
+            temp.next = heroNode;
+            heroNode.next = null;
+        }
+        return newNode;
+    }
+
+    /**
+     * 反转链表 思路: 1.创建一个新的 head = reverseHead 2.遍历原来的链表 一个个取出来 把最新取出来的 放到链表的头部 3.把原始的head 指向
+     * reverseHead
+     */
+    static void reverseLinked(SingleLinked singleLinked) {
+        if (singleLinked.head == null) {
+            System.out.println("链表为空不能反转");
+            return;
+        }
+        HeroNode reversHead = new HeroNode();
+        HeroNode cur = singleLinked.head.next;
+        // 一定要记录一下 cur 的next 否则当  cur.next = reversHead.next; 后就找不到原始的 cur的next了
+        HeroNode next;
+        while (cur != null) {
+            // 重要
+            next = cur.next;
+            cur.next = reversHead.next;
+            reversHead.next = cur;
+            cur = next;
+        }
+        // 最后把原始head 关联上 reversHead
+        singleLinked.head = reversHead;
+    }
+
+    /**
+     * 得到单链表的倒数第index的 node节点
+     *
+     * <p>思路: 先获取单链表的 length 再根据 length - index 得到正向的位置 循环正向得到
+     *
+     * @param singleLinked
+     * @param index
+     * @return
+     */
+    static HeroNode getLastByIndex(SingleLinked singleLinked, int index) {
+        if (singleLinked.head.next == null) {
+            // 空链表
+            return null;
+        }
+        int length = getLength(singleLinked);
+        // 正向遍历次数
+        int frontCount = length - index;
+        if (frontCount < 0 || frontCount > length) {
+            System.out.println("不存在");
+            return null;
+        }
+        HeroNode temp = singleLinked.head.next;
+        for (int i = 0; i < frontCount; i++) {
+            temp = temp.next;
+        }
+        return temp;
+    }
+
+    static int getLength(SingleLinked singleLinked) {
+        int length = 0;
+        if (singleLinked.head.next == null) {
+            return length;
+        }
+        HeroNode temp = singleLinked.head.next;
+        while (temp != null) {
+            length++;
+            temp = temp.next;
+        }
+        return length;
     }
 
     static class SingleLinked {
@@ -70,6 +175,60 @@ public class SingleLinkedTest {
             }
             // 把最后一个元素的 next 指向 新加入的node
             temp.next = node;
+        }
+
+        void update(HeroNode newHeroNode) {
+            if (newHeroNode == null) {
+                System.out.println("更新的node不能为空");
+                return;
+            }
+            if (head.next == null) {
+                System.out.println("链表为空");
+                return;
+            }
+            // 标志 是否找到
+            boolean flag = false;
+            HeroNode temp = head.next;
+            while (true) {
+                if (temp == null) {
+                    break;
+                }
+                if (temp.number == newHeroNode.number) {
+                    flag = true;
+                    break;
+                }
+                temp = temp.next;
+            }
+            if (flag) {
+                temp.name = newHeroNode.name;
+                temp.nickName = newHeroNode.nickName;
+            } else {
+                System.out.println("未找到对应的no 不能进行修改");
+            }
+        }
+
+        void delete(HeroNode heroNode) {
+            HeroNode temp = head;
+            if (temp.next == null) {
+                System.out.println("链表为空");
+                return;
+            }
+            boolean flag = false;
+            while (true) {
+                if (temp.next == null) {
+                    break;
+                }
+                if (temp.next.number == heroNode.number) {
+                    flag = true;
+                    break;
+                }
+                temp = temp.next;
+            }
+            if (flag) {
+                temp.next = temp.next.next;
+            } else {
+                System.out.println("未找到要删除的no");
+            }
         }
 
         void addToListOrderBy(HeroNode node) {

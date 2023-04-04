@@ -34,3 +34,4 @@ public class BinaryLookupTest {
         return -1;
     }
 }
+
