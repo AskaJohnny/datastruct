@@ -1,5 +1,7 @@
 package com.johnny.linked;
 
+import java.util.Stack;
+
 /**
  * Created on 2023/4/3 17:32.
  *
@@ -22,9 +24,14 @@ public class SingleLinkedReversedTest {
         showNode(node1);
         // Node<Integer> reversed = reversed(node1);
         System.out.println("---------reversed--------");
-        //Node<Integer> reversed = reversedTwoPoint(node1);
+        // Node<Integer> reversed = reversedTwoPoint(node1);
         Node<Integer> reversed = reversedRecursion(node1);
         showNode(reversed);
+
+        //递归 打印
+        reversedPrint(reversed);
+        //借助 stack 栈 打印
+        reversedPrintUseStack(reversed);
     }
 
     static <T> void showNode(Node<T> node) {
@@ -39,21 +46,6 @@ public class SingleLinkedReversedTest {
         }
     }
 
-    static class Node<T> {
-        Node<T> next; // next
-        T data; // 数据域
-
-        public Node(T data) {
-            this.data = data;
-        }
-
-        public Node() {}
-
-        @Override
-        public String toString() {
-            return "Node{data=" + data + '}';
-        }
-    }
 
     /**
      * 最好的方式 (双指针法)
@@ -115,10 +107,47 @@ public class SingleLinkedReversedTest {
 
     private static <T> Node<T> recursion(Node<T> pre, Node<T> cur) {
         if (cur == null) {
+            // 最终返回 最后一个pre 尾指针
             return pre;
         }
         Node<T> temp = cur.next;
         cur.next = pre;
+        // 处理下一个就调用节点 递归方法,  递归方法里 再找下个个 并且反转当前的cur.next=pre
         return recursion(cur, temp);
+    }
+
+    /**
+     * 逆序 打印单链表 从尾部打印
+     *
+     * @param node
+     * @param <T>
+     */
+    static <T> void reversedPrint(Node<T> node) {
+        Node<T> temp = node.next;
+        if (temp != null) {
+            reversedPrint(temp);
+        }
+        System.out.println(node);
+    }
+
+    /**
+     * 逆序 打印单链表 从尾部打印 借助 stack 栈
+     * @param node
+     * @param <T>
+     */
+    static <T> void reversedPrintUseStack(Node<T> node) {
+        if (node == null) {
+            System.out.println("空链表");
+            return;
+        }
+        Node<T> temp = node;
+        Stack<Node<T>> stack = new Stack<>();
+        while (temp != null) {
+            stack.push(temp);
+            temp = temp.next;
+        }
+        while (stack.size() > 0) {
+            System.out.println(stack.pop());
+        }
     }
 }
